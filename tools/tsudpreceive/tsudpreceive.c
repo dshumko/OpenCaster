@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2008, Lorenzo Pallara l.pallara@avalpa.com
+ * Copyright (C) 2008-2013, Lorenzo Pallara l.pallara@avalpa.com
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,7 +37,16 @@ int main(int argc, char* argv[]) {
 
     int sockfd;
     struct sockaddr_in addr;
-    struct ip_mreqn mgroup;
+    #ifdef ip_mreqn
+     struct ip_mreqn mgroup;XXX
+    #else
+     /* according to
+          http://lists.freebsd.org/pipermail/freebsd-current/2007-December/081080.html
+        in bsd it is also possible to simply use ip_mreq instead of ip_mreqn
+        (same as in Linux), so we are using this instead
+     */
+     struct ip_mreq mgroup;
+    #endif
     int reuse;
     unsigned int addrlen;
     int len;
@@ -50,7 +59,12 @@ int main(int argc, char* argv[]) {
     } else {
 	memset((char *) &mgroup, 0, sizeof(mgroup));
 	mgroup.imr_multiaddr.s_addr = inet_addr(argv[1]);
-	mgroup.imr_address.s_addr = INADDR_ANY;
+        #ifdef ip_mreqn
+	 mgroup.imr_address.s_addr = INADDR_ANY;
+        #else
+         /* this is called 'interface' here */
+	 mgroup.imr_interface.s_addr = INADDR_ANY;
+        #endif
 	memset((char *) &addr, 0, sizeof(addr));
 	addr.sin_family = AF_INET;
 	addr.sin_port = htons(atoi(argv[2]));

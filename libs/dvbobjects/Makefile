@@ -5,10 +5,10 @@
 all:
 	./setup.py build
 
-#install: all
-#	./setup.py install --home=$(INSTHOME)
 install: all
-	./setup.py install 
+	./setup.py install --root=$(INSTHOME)
+#install: all
+#	./setup.py install 
 
 clean:
 	./setup.py clean

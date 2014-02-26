@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2008, Lorenzo Pallara l.pallara@avalpa.com
+ * Copyright (C) 2008-2013, Lorenzo Pallara l.pallara@avalpa.com
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -65,7 +65,11 @@ int main (int argc, char *argv[]) {
     int sockfd;
     int len;
     int sent;
+    int ret;
+    int is_multicast;
     int transport_fd;
+    unsigned char option_ttl;
+    char start_addr[4];
     struct sockaddr_in addr;
     unsigned long int packet_size;   
     char* tsfile;
@@ -83,7 +87,7 @@ int main (int argc, char *argv[]) {
     memset(&nano_sleep_packet, 0, sizeof(nano_sleep_packet));
 
     if(argc < 5 ) {
-	fprintf(stderr, "Usage: %s file.ts ipaddr port bitrate [ts_packet_per_ip_packet]\n", argv[0]);
+	fprintf(stderr, "Usage: %s file.ts ipaddr port bitrate [ts_packet_per_ip_packet] [udp_packet_ttl]\n", argv[0]);
 	fprintf(stderr, "ts_packet_per_ip_packet default is 7\n");
 	fprintf(stderr, "bit rate refers to transport stream bit rate\n");
 	fprintf(stderr, "zero bitrate is 100.000.000 bps\n");
@@ -110,6 +114,25 @@ int main (int argc, char *argv[]) {
 	return 0;
     } 
     
+    if (argc >= 7)  {
+	option_ttl = atoi(argv[6]);
+	is_multicast = 0;
+	memcpy(start_addr, argv[2], 3);
+	start_addr[3] = 0;
+	is_multicast = atoi(start_addr);
+	is_multicast = (is_multicast >= 224) || (is_multicast <= 239);
+	if (is_multicast) {
+	    ret = setsockopt(sockfd, IPPROTO_IP, IP_MULTICAST_TTL, &option_ttl, sizeof(option_ttl));
+	} else {
+	    ret = setsockopt(sockfd, IPPROTO_IP, IP_TTL, &option_ttl, sizeof(option_ttl));
+	}
+	
+	if(ret < 0) {
+	    perror("ttl configuration fail");
+	}
+	
+    }
+    
     transport_fd = open(tsfile, O_RDONLY);
     if(transport_fd < 0) {
 	fprintf(stderr, "can't open file %s\n", tsfile);
@@ -130,7 +153,7 @@ int main (int argc, char *argv[]) {
     
 	    clock_gettime(CLOCK_MONOTONIC, &time_stop);
 	    real_time = usecDiff(&time_stop, &time_start);
-	    while (real_time * bitrate > packet_time * 1000000) { /* theorical bits against sent bits */
+	    while (real_time * bitrate > packet_time * 1000000 && !completed) { /* theorical bits against sent bits */
 		len = read(transport_fd, send_buf, packet_size);
 		if(len < 0) {
 		    fprintf(stderr, "ts file read error \n");

@@ -9,8 +9,8 @@ SUBDIRS = oc2sec sec2ts zpipe \
 	tstimedwrite tsinputswitch tsdoubleoutput pes2txt \
 	tsoutputswitch tsccc txt2pes ts2sec \
 	pesdata2ts tsmask tsorts tsororts tspcrrestamp \
-	tsprinter eitsecfilter eitsecmapper m2ts2ts \
-	ts2m2ts
+	eitsecfilter eitsecmapper m2ts2cbrts \
+	ts2m2ts tsdiscont eitsecactualtoanother 
 
 subdirs:        $(SUBDIRS)
 $(SUBDIRS):

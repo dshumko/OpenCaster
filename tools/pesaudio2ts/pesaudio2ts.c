@@ -1,9 +1,9 @@
 /* 
- * Copyright (C) 2009  Lorenzo Pallara, l.pallara@avalpa.com
+ * Copyright (C) 2009-2013  Lorenzo Pallara, l.pallara@avalpa.com
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2.1
+ * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -11,9 +11,9 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public License
+ * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02111-1307, USA.
  */
 
 #define _BSD_SOURCE 1
@@ -31,6 +31,10 @@
 #include <inttypes.h>
 #include <fcntl.h>
 #include <limits.h>
+
+#ifndef PATH_MAX
+#define PATH_MAX 4096
+#endif
 
 #define MAX_PID 8192
 #define PTS_TIME 90000LL
@@ -475,7 +479,7 @@ int main(int argc, char *argv[])
 				/* Move a packet from the lookahead to the current packet */
 				ts_packet[TS_HEADER_SIZE + ts_payload] = look_ahead_buffer[0];
 				ts_payload++;
-				for (i = 0; i < PES_HEADER_SIZE; i++){
+				for (i = 0; i < PES_HEADER_SIZE-1; i++){
 					look_ahead_buffer[i] = look_ahead_buffer[i + 1];
 				}
 				look_ahead_size--;

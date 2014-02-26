@@ -16,11 +16,12 @@ setup(
     version = "0.1",
     description = "Python Package for dvb transport stream data generation (PAT, PMT, NIT, Object Carousel, ...)",
     author = "Lorenzo Pallara",
-    author_email = "lpallara@cineca.it",
+    author_email = "l.pallara@avalpa.com",
     url = "",
     
     packages = [
         'dvbobjects',
+        'dvbobjects.ATSC',
         'dvbobjects.DSMCC',
         'dvbobjects.DSMCC.BIOP',
         'dvbobjects.DVB',

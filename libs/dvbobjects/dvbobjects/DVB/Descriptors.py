@@ -1,7 +1,7 @@
 #! /usr/bin/env python
 
 #
-# Copyright (C) 2004  Lorenzo Pallara, lpallara@cineca.it
+# Copyright (C) 2004-2013  Lorenzo Pallara, l.pallara@avalpa.com
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,7 +15,7 @@
 #                                  
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
 import string
 from dvbobjects.utils import *
@@ -323,14 +323,14 @@ class transport_stream_sat_descriptor(Descriptor):
     descriptor_tag = 0x43
  
     def bytes(self):
-	fmt = "!LHBL"
+    	fmt = "!LHBL"
 	return pack(fmt,
 		self.frequency,
 		self.orbital_position,
-		(self.west_east_flag << 7) | (self.polarization << 5) |  self.modulation,
+		(self.west_east_flag << 7) | (self.polarization << 5) | self.modulation,
 		(self.symbol_rate << 4)| self.FEC_inner,
 	)
- 
+
 #######################################################################
 class transport_stream_cable_descriptor(Descriptor):
 
@@ -376,7 +376,7 @@ class registration_descriptor(Descriptor):
     descriptor_tag = 0x05
 
     def bytes(self):
-        fmt = "!L"
+        fmt = "!%ds" % len(self.format_identifier)
         return pack(fmt,
 			self.format_identifier
         )
@@ -1191,20 +1191,6 @@ class ISO_639_language_descriptor(Descriptor):
         )
 
 ######################################################################
-class ISO_639_language_descriptor(Descriptor):
-
-    descriptor_tag = 0x0A
-
-    def bytes(self):
-        fmt = "!%dsB" % (
-			len(self.ISO_639_language_code),
-			)
-        return pack(fmt,
-		    self.ISO_639_language_code,
-		    self.Audio_type,
-        )
-
-######################################################################
 class supplementary_audio_descriptor(Descriptor):
 
     descriptor_tag = 0x7F;
@@ -1230,3 +1216,16 @@ class private_data_descriptor(Descriptor):
     def bytes(self):
         fmt = "!"
         return pack(fmt)
+
+######################################################################
+class bouquet_descriptor(Descriptor):
+
+    descriptor_tag = 0x47
+
+    def bytes(self):
+        fmt = "!%ds" % len(self.bouquet_name)
+        return pack(
+            fmt,
+            self.bouquet_name,
+        )
+

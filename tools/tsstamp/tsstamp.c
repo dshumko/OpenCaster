@@ -1,9 +1,9 @@
 /*
- * Copyright (C) 2004  Lorenzo Pallara, lpallara@cineca.it
+ * Copyright (C) 2004-2013  Lorenzo Pallara, l.pallara@avalpa.com
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2.1
+ * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -11,9 +11,9 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public License
+ * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02111-1307, USA.
  */
 
 #include <netinet/in.h>
@@ -66,6 +66,7 @@ int main(int argc, char *argv[])
 	int fd_ts;			/* File descriptor of ts file */
 	u_short pid;
 	int byte_read;
+	int pusi = 0;
 	int pcr_ext = 0;
 	int ts_header_size = 0;
 	unsigned int i;
@@ -140,8 +141,10 @@ int main(int argc, char *argv[])
 			pid = ntohs(pid);
 			pid = pid & 0x1fff;
 			
+			pusi = current_packet[1] & 0x40;
+			
 			/* Check pcr */
-			if ((pid < MAX_PID) && (current_packet[3] & 0x20) && (current_packet[4] != 0) && (current_packet[5] & 0x10)) { /* there is PCR */ 
+			if ((pid < MAX_PID) && (current_packet[3] & 0x20) && (current_packet[4] != 0) && (current_packet[5] & 0x10) && pusi) { /* there is PCR */ 
 			
 				new_pcr_index =  (ts_packet_count * TS_PACKET_SIZE) + 10;
 				if (pcr_index_table[pid] != 0) { 
@@ -203,7 +206,7 @@ int main(int argc, char *argv[])
 			/* check the time difference between first two pts and ... */
 			pes_header_size = 0;
 			time = 0;
-			if (ts_header_size + 20 < TS_PACKET_SIZE && pid < MAX_PID) {
+			if (ts_header_size + 20 < TS_PACKET_SIZE && pid < MAX_PID && pusi) {
 				if ((current_packet[ts_header_size] == 0x00) && (current_packet[ts_header_size + 1] == 0x00) && (current_packet[ts_header_size + 2] == 0x01)) { 
 					pes_header_size = current_packet[ts_header_size + 8];
 					if ((current_packet[ts_header_size + 3] >> 4) == 0x0E) { /* PES video stream */

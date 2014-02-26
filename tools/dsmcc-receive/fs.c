@@ -42,6 +42,10 @@
 #include "biop.h"
 #include "utils.h"
 
+#ifndef PATH_MAX
+#define PATH_MAX 4096
+#endif
+
 static char _carousel_root[PATH_MAX];
 
 char *

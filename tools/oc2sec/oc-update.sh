@@ -10,7 +10,7 @@ then
 	/bin/echo "	- pid, referenced by PMTs using this carousel"
 	/bin/echo "	- carousel_id, referenced by PMTs using this carousel, every carousel has its own, it is an alternative for association_tag, they have the same function"
 	/bin/echo "	- compress_mode, 0: don't compress, 1:compress all, 2:smart compress, file with .solo extension are set in an uncompressed module alone to allow use cases like quick image file update, default is 2"
-	/bin/echo "	- padding_on, every section is padded, was useful with some buggy decoder, waste bandwith, default off, unsupported since OpenCaster 2.4.8"
+	/bin/echo "	- padding_on, every section is padded, was useful with some buggy decoder, waste bandwidth, default off, unsupported since OpenCaster 2.4.8"
 	/bin/echo "	- clean_off, don't delete temp file, default off, used for debug"
 	/bin/echo "	- DDB_size, Use custom size for DDB payload, default = max = 4066"
 	/bin/echo "	- sets the Update flag in the TransactionID of DSI and DII to the value given (0 or 1)"
@@ -28,7 +28,7 @@ then
 	/bin/echo "	delete temp files"
 	/bin/echo "	use 4066 bytes for DDB size (usual and maximum size)"
 	/bin/echo "	sets update flag to 0 in DSI/DII"
-	/bin/echo "	insert DSI/DII/SGW twice per carousel lenght"
+	/bin/echo "	insert DSI/DII/SGW twice per carousel length"
 	exit 65
 fi
 

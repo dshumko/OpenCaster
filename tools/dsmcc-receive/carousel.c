@@ -3,7 +3,7 @@
  */
 
 /*
- * Copyright (C) 2008, Lorenzo Pallara
+ * Copyright (C) 2008-2013, Lorenzo Pallara l.pallara@avalpa.com
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

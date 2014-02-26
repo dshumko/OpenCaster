@@ -1,9 +1,9 @@
 /*  
- * Copyright (C) 2008 Lorenzo Pallara, l.pallara@avalpa.com
+ * Copyright (C) 2008-2013 Lorenzo Pallara, l.pallara@avalpa.com
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2.1
+ * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -11,9 +11,13 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public License
+ * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02111-1307, USA.
+
+ * Last modification :
+ * Frederic Delagree, Frederic.delagree@orange.com, 4 April 2012
+ * Take into account the value of pointer_field value into section. 
  */
 
 
@@ -178,20 +182,27 @@ int main(int argc, char *argv[])
 			adapt_field = (current_packet[3] >> 4) & 0x03;
 			if (adapt_field == 0) {
 				ts_header_size = TS_PACKET_SIZE; /* jump the packet, is invalid ? */
-				/* fprintf(stderr, "invalid packet!\n"); */			
+				 fprintf(stderr, "invalid packet!\n"); 			
 			} else if (adapt_field == 1) {
+				 /* fprintf(stderr, "regular case\n"); 			*/
 				; /* regular case */
 			} else if (adapt_field == 2) {
+				/* fprintf(stderr, "adapt_field == 2\n"); 			*/
 				ts_header_size = TS_PACKET_SIZE; /* this packet has only adaptation field */
 				/* fprintf(stderr, "adapatation field only?\n"); */
 			} else if (adapt_field == 3) {
+				/* fprintf(stderr, "adapt_field == 3\n"); 			*/
 				ts_header_size += current_packet[ts_header_size] + 1;
 				/* fprintf(stderr, "adaptation field shouldn't be set for sections\n"); */
 			}
 			if (ts_header_size < TS_PACKET_SIZE) {
 				if (pusi) {
-				/* fprintf(stderr, "new section, payload starts at %d\n", current_packet[ts_header_size]); */
-					add_payload(current_packet + ts_header_size + 1, TS_PACKET_SIZE - ts_header_size - 1);
+/*				 fprintf(stderr, "new section, payload starts at %d,tid=%d\n", current_packet[ts_header_size],current_packet[ts_header_size+current_packet[ts_header_size]+1]); */
+				if (current_packet[ts_header_size] > 0 ) 
+					add_payload(current_packet + ts_header_size+1, current_packet[ts_header_size] );
+
+					add_payload(current_packet + ts_header_size + 1 +current_packet[ts_header_size], TS_PACKET_SIZE - ts_header_size - 1 -current_packet[ts_header_size]); 
+				/*	add_payload(current_packet + ts_header_size + 1, TS_PACKET_SIZE - ts_header_size - 1); */
 				} else {
 					add_payload(current_packet + ts_header_size, TS_PACKET_SIZE - ts_header_size);
 				}

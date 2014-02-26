@@ -1,9 +1,9 @@
 /*  
- * Copyright (C) 2004  Lorenzo Pallara, lpallara@cineca.it 
+ * Copyright (C) 2004-2013  Lorenzo Pallara, l.pallara@avalpa.com
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2.1
+ * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -11,9 +11,9 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public License
+ * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02111-1307, USA.
  */
 
 #include <netinet/in.h>
@@ -176,7 +176,7 @@ void Usage (void) {
 	fprintf(stderr, "'t:m_secs file.ts' replace a null packet from input.ts with a packet from file.ts every m_secs milliseconds of REAL TIME, this packet has priority on +file.ts packets\n");
 	fprintf(stderr, "'s:file.ts' try to read from the file.ts, if fails move to next\n");
 	fprintf(stderr, "'b:packets_buffer' sets how many packets to use for buffering\n");
-	fprintf(stderr, "It was choosen to use REAL TIME instead of PCR LOGICAL TIME so it was possibile to manage TS without PCR\n");
+	fprintf(stderr, "It was chosen to use REAL TIME instead of PCR LOGICAL TIME so it was possibile to manage TS without PCR\n");
 	fprintf(stderr, "This suits anyway PSI insertion case that is not so time strict\n");
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2008, l.pallara@avalpa.com
+ * Copyright (C) 2008-2013, Lorenzo Pallara l.pallara@avalpa.com
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -44,7 +44,6 @@ int
 main(int argc, char *argv[])
 {
     char* directory = 0;
-    char* sections = 0;
     int cachesize = 0;
     int result = 0;
     int pid = 0;
