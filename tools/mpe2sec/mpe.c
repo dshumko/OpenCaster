@@ -10,9 +10,9 @@
 
 #include <sys/ioctl.h>
 #include <sys/socket.h>
-#include <net/if.h>
+#include <linux/if.h>
 
-#include <net/if_tun.h>
+#include <linux/if_tun.h>
 
 #include "sectioncrc.h"
 
