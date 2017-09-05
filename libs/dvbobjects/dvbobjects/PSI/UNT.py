@@ -75,10 +75,11 @@ class unt_compatibility_descriptor_loop_item(DVBobject):
         
          fmt = "!H%dsHH%dsH%ds" % (len(self.compatibility_descriptor), len(tdl_bytes), len(odl_bytes))
          return pack(fmt,
-                len(self.compatibility_descriptor),
-    		    len(tdl_bytes) + len(odl_bytes),
-    		    0xF000 | len(tdl_bytes),
-                    tdl_bytes,
-                    0xF000 | len(odl_bytes),
-                    odl_bytes,
-                    )
+             len(self.compatibility_descriptor),
+             self.compatibility_descriptor,
+    		 len(tdl_bytes) + len(odl_bytes),
+    		 0xF000 | len(tdl_bytes),
+             tdl_bytes,
+             0xF000 | len(odl_bytes),
+             odl_bytes,
+             )
